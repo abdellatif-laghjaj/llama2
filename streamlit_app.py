@@ -4,13 +4,6 @@ import os
 
 # App title
 st.set_page_config(page_title="Llama2 🦙 Chatbot")
-st.header('Made with ❤️ by:')
-# 3 names in list markdown
-st.markdown('''
-            - LAGHJAJ Abdellatif
-            - EL HAMMOUCHI Yassine
-            - EL HAMMOUCHI Yassine
-            ''')
 
 # Replicate Credentials
 with st.sidebar:
