@@ -3,7 +3,14 @@ import replicate
 import os
 
 # App title
-st.set_page_config(page_title="🦙💬 Llama 2 Chatbot")
+st.set_page_config(page_title="Llama2 🦙 Chatbot")
+st.header('Made with ❤️ by:')
+# 3 names in list markdown
+st.markdown('''
+            - LAGHJAJ Abdellatif
+            - EL HAMMOUCHI Yassine
+            - EL HAMMOUCHI Yassine
+            ''')
 
 # Replicate Credentials
 with st.sidebar:
@@ -14,7 +21,7 @@ with st.sidebar:
         replicate_api = st.secrets['REPLICATE_API_TOKEN']
     else:
         replicate_api = st.text_input('Enter Replicate API token:', type='password')
-        if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
+        if not (replicate_api.startswith('r8_') and len(replicate_api) == 40):
             st.warning('Please enter your credentials!', icon='⚠️')
         else:
             st.success('Proceed to entering your prompt message!', icon='👉')
@@ -52,10 +59,15 @@ def generate_llama2_response(prompt_input):
             string_dialogue += "User: " + dict_message["content"] + "\n\n"
         else:
             string_dialogue += "Assistant: " + dict_message["content"] + "\n\n"
-    output = replicate.run('a16z-infra/llama13b-v2-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5', 
-                           input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
-                                  "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
-    return output
+    try:
+        output = replicate.run(
+            llm, 
+            input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ", "temperature": temperature, "top_p": top_p, "max_length": max_length, "repetition_penalty": 1}
+        )
+        return output
+    except replicate.exceptions.ReplicateError as e:
+        st.error(f"Error generating response: {e}")
+        return []
 
 # User-provided prompt
 if prompt := st.chat_input(disabled=not replicate_api):
