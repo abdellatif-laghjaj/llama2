@@ -1,6 +1,7 @@
 import streamlit as st
 import replicate
 import os
+from dotenv import load_dotenv
 
 # App title and favicon
 st.set_page_config(
@@ -8,9 +9,9 @@ st.set_page_config(
     page_icon="🦙"
 )
 
-# Replicate API key
-REPLICATE_API_TOKEN = "r8_QJrQ4jZsbQ1QUdZQsmAcZSibKsNeOzI3PbUUa"
-os.environ['REPLICATE_API_TOKEN'] = REPLICATE_API_TOKEN
+# Load environment variables from .env
+load_dotenv()
+REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
 
 
 # --- Functions ---
@@ -47,7 +48,7 @@ def display_chat_history():
 
 # --- Sidebar ---
 st.sidebar.title('🦙💬 Llama 2 Chatbot')
-st.sidebar.write("This chatbot is powered by Meta's Llama 2 LLM.")
+st.sidebar.write('This chatbot is powered by Meta\'s Llama 2 LLM.')
 
 # Model Selection
 selected_model = st.sidebar.selectbox(
