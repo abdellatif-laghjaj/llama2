@@ -68,8 +68,7 @@ selected_model = st.sidebar.selectbox(
     [
         "Llama2-7B (Faster)",
         "Llama2-13B (More Powerful)"
-    ],
-    key='selected_model'
+    ]
 )
 
 # Model Mapping
