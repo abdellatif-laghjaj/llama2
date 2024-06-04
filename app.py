@@ -13,21 +13,32 @@ st.set_page_config(
 load_dotenv()
 REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
 
+# Ensure the API token is loaded
+if not REPLICATE_API_TOKEN:
+    st.error("Replicate API token is missing. Please set it in the .env file.")
+    st.stop()
+
 
 # --- Functions ---
+def format_dialogue(messages):
+    """Format the chat history into a string for the model prompt."""
+    dialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
+    for message in messages:
+        role = "User" if message["role"] == "user" else "Assistant"
+        dialogue += f"{role}: {message['content']}\n\n"
+    return dialogue
+
+
 def generate_llama2_response(prompt_input, model, temperature, top_p, max_length):
-    string_dialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
-    for message in st.session_state.messages:
-        if message["role"] == "user":
-            string_dialogue += "User: " + message["content"] + "\n\n"
-        else:
-            string_dialogue += "Assistant: " + message["content"] + "\n\n"
+    """Generate a response from the Llama2 model using the Replicate API."""
+    dialogue = format_dialogue(st.session_state.messages)
+    prompt = f"{dialogue}User: {prompt_input}\n\nAssistant: "
 
     try:
         output = replicate.run(
             model,
             input={
-                "prompt": f"{string_dialogue} {prompt_input} Assistant: ",
+                "prompt": prompt,
                 "temperature": temperature,
                 "top_p": top_p,
                 "max_length": max_length,
@@ -41,6 +52,7 @@ def generate_llama2_response(prompt_input, model, temperature, top_p, max_length
 
 
 def display_chat_history():
+    """Display the chat history in the Streamlit chat interface."""
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -105,7 +117,7 @@ st.title("🦙💬 Llama 2 Chatbot")
 st.write("Welcome to the Llama 2 Chatbot! Ask me anything and I'll do my best to assist you.")
 
 # Initialize chat history
-if "messages" not in st.session_state.keys():
+if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "assistant", "content": "How may I assist you today?"}
     ]
