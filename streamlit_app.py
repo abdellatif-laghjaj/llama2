@@ -47,7 +47,7 @@ def display_chat_history():
 
 
 # --- Sidebar ---
-st.sidebar.title('🦙💬 Llama 2 Chatbot')
+st.sidebar.title('Llama 2 🦙 Chatbot')
 st.sidebar.write('This chatbot is powered by Meta\'s Llama 2 LLM.')
 
 # Model Selection
@@ -102,6 +102,7 @@ if st.sidebar.button('Clear Chat History'):
 
 # --- Main Chat Area ---
 st.title("🦙💬 Llama 2 Chatbot")
+st.write("Welcome to the Llama 2 Chatbot! Ask me anything and I'll do my best to assist you.")
 
 # Initialize chat history
 if "messages" not in st.session_state.keys():
@@ -113,7 +114,7 @@ if "messages" not in st.session_state.keys():
 display_chat_history()
 
 # User Input
-if prompt := st.chat_input("Enter your message here:"):
+if prompt := st.chat_input("Type a message..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
