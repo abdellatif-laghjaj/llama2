@@ -48,7 +48,7 @@ def display_chat_history():
 
 # --- Sidebar ---
 st.sidebar.title('Llama 2 🦙 Chatbot')
-st.sidebar.write('This chatbot is powered by Meta\'s Llama 2 LLM.')
+st.sidebar.success('This chatbot is powered by Meta\'s Llama 2 LLM.')
 
 # Model Selection
 selected_model = st.sidebar.selectbox(
